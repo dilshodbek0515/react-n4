@@ -2,11 +2,13 @@ import "./Todolist.css"
 import React, { useState } from "react"
 import { v4 as uuidv4 } from 'uuid';
 import { FaTrash } from "react-icons/fa";
+
 const Todolist = () => {
     const [text, setText] = useState("")
     const [data, setData] = useState([])
     const [editId, setEditId] = useState(null)
-    const [editTask, setEditTask] = useState("")
+    const [editText, setEditText] = useState("")
+
     const refresh = (event) => {
         event.preventDefault()
         if (!text.trim()) {
@@ -24,9 +26,19 @@ const Todolist = () => {
     }
 
     const Delete = (id) => {
-        console.log(id);
         setData(data.filter(item => item.id !== id))
     }
+
+    const startEdit = (id, currentText) => {
+        setEditId(id);
+        setEditText(currentText);
+    };
+
+    const saveEdit = (id) => {
+        setData(data.map(item => item.id === id ? { ...item, text: editText } : item));
+        setEditId(null);
+        setEditText("");
+    };
 
     return (
         <div className='my-0 m-auto w-[600px] h-[600px] rounded-xl bg-slate-400 flex items-center flex-col gap-8 p-5'>
@@ -38,8 +50,18 @@ const Todolist = () => {
                 {
                     data?.map((item) => (
                         <div className="CREATE flex items-center justify-between" key={item.id}>
-                            <span className="bg-green-500 rounded-lg w-32 h-auto py-1 px-2 flex-wrap break-normal break-all text-white">{item.text}</span>
-                            <button className="bg-yellow-400 rounded-lg w-[80px] h-[30px] flex justify-center items-center text-white">Edit</button>
+                            {editId === item.id ? (
+                                <input type="text" value={editText} onChange={(e) => setEditText(e.target.value)} className="w-[200px] h-[30px] rounded-lg px-2 outline-none" />
+                            ) : (
+                                <span className="bg-green-500 rounded-lg w-32 h-auto py-1 px-2 flex-wrap break-normal break-all text-white">{item.text}</span>
+                            )}
+
+                            {editId === item.id ? (
+                                <button className="bg-blue-500 rounded-lg w-[80px] h-[30px] flex justify-center items-center text-white" onClick={() => saveEdit(item.id)}>Save</button>
+                            ) : (
+                                <button className="bg-yellow-400 rounded-lg w-[80px] h-[30px] flex justify-center items-center text-white" onClick={() => startEdit(item.id, item.text)}>Edit</button>
+                            )}
+
                             <span className="bg-blue-700 rounded-lg w-[80px] h-[30px] flex justify-center items-center text-white">{item.time}</span>
                             <button className="bg-red-600 rounded-lg w-[80px] h-[30px] flex justify-center items-center text-white" onClick={() => Delete(item.id)}><FaTrash /></button>
                         </div>
