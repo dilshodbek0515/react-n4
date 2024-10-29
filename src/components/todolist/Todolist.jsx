@@ -46,7 +46,7 @@ const Todolist = () => {
                 <input value={text} onChange={(e) => setText(e.target.value)} type="text" className="text-blue-500 h-full flex-1 border-transparent outline-none bg-white rounded-s-xl px-5" placeholder="Enter your task!" />
                 <button className="border border-black w-32 h-full border-transparent rounded-e-xl bg-blue-700 text-white hover:opacity-50">Create</button>
             </form>
-            <div className="w-[540px] h-full overflow-auto rounded-xl shadow-2xl bg-slate-300 p-7 flex flex-col gap-10">
+            <div className="SCROLL w-[540px] h-full overflow-auto rounded-xl shadow-2xl bg-slate-300 p-7 flex flex-col gap-10 scroll-">
                 {
                     data?.map((item) => (
                         <div className="CREATE flex items-center justify-between" key={item.id}>
